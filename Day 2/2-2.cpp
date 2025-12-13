@@ -12,20 +12,23 @@ int main() {
         stringstream sss(t);
         string start; getline(sss, start, '-');
         string end; getline(sss, end, '-');
+        ll start_num = stoll(start);
         ll end_num = stoll(end);
-        string start_num_half;
-        if (start.size() % 2 == 1) start_num_half = to_string((ll)(pow(10, start.size() / 2)));
-        else if (stoll(start.substr(start.size() / 2)) > stoll(start.substr(0, start.size() / 2)))
-            start_num_half = to_string(stoll(start.substr(0, start.size() / 2)) + 1);
-        else start_num_half = start.substr(0, start.size() / 2);
+        string start_num_half = "1";
+        std::unordered_set<ll> unique;
         while (true) {
-            ll next_num = stoll(start_num_half + start_num_half);
-            if (next_num > end_num) break;
-            cout << "Adding num: " << next_num << endl;
-            ans += next_num;
+            string curr = start_num_half + start_num_half;
+            if (stoll(curr) > end_num) break;
+            while (stoll(curr) < start_num) curr += start_num_half;
+            while (stoll(curr) <= end_num) {
+                if (!unique.contains(stoll(curr))) {
+                    unique.insert(stoll(curr));
+                    ans += stoll(curr);
+                }
+                curr += start_num_half;
+            }
             start_num_half = to_string(stoll(start_num_half) + 1);
         }
-        cout << endl;
     }
     cout << ans << endl;
 }
